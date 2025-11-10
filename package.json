@@ -1,6 +1,6 @@
 {
   "name": "siray",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Siray Node.js SDK",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -9,7 +9,12 @@
     "test": "jest",
     "prepublishOnly": "npm run build"
   },
-  "keywords": ["siray", "ai", "api", "client"],
+  "keywords": [
+    "siray",
+    "ai",
+    "api",
+    "client"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
