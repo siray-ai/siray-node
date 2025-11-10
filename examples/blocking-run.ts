@@ -9,7 +9,7 @@ async function runBlockingImageGeneration() {
     console.log('Submitting blocking image generation request...');
     const status = await client.image.run(
       {
-        model: 'black-forest-labs/flux-1.1-pro-ultra-i2i',
+        model: 'black-forest-labs/flux-1.1-pro-ultra-t2i',
         prompt: 'A cinematic portrait photo of a cyberpunk samurai',
       },
       {
