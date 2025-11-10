@@ -65,15 +65,15 @@ export class TaskStatusImpl implements TaskStatus {
   }
 
   isCompleted(): boolean {
-    return ['COMPLETED', 'SUCCESS', 'SUCCEEDED'].includes(this.status.toUpperCase());
+    return ['SUCCESS'].includes(this.status.toUpperCase());
   }
 
   isFailed(): boolean {
-    return ['FAILED', 'ERROR'].includes(this.status.toUpperCase());
+    return ['FAILURE'].includes(this.status.toUpperCase());
   }
 
   isProcessing(): boolean {
-    return ['PENDING', 'PROCESSING', 'RUNNING', 'IN_PROGRESS'].includes(this.status.toUpperCase());
+    return ['NOT_START', 'SUBMITTED', 'QUEUED', 'IN_PROGRESS'].includes(this.status.toUpperCase());
   }
 }
 
