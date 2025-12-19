@@ -1,6 +1,6 @@
 {
   "name": "siray",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Siray Node.js SDK",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

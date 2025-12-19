@@ -24,8 +24,11 @@ export class Siray {
   public readonly image: Image;
   public readonly video: Video;
 
-  constructor(options: SirayOptions) {
-    this.apiKey = options.apiKey;
+  constructor(options: SirayOptions = {}) {
+    this.apiKey = options.apiKey || process.env.SIRAY_API_KEY || '';
+    if (!this.apiKey) {
+      throw new SirayError('API key is required. Provide it via options.apiKey or set SIRAY_API_KEY environment variable.');
+    }
     this.baseURL =
       options.baseURL ||
       'https://api.siray.ai';

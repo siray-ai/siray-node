@@ -8,6 +8,34 @@ Node.js SDK for Siray Image and Video Generation APIs.
 npm install siray
 ```
 
+## Configuration
+
+### API Key
+
+You can provide your API key in two ways:
+
+1. **Via constructor options** (recommended for explicit configuration):
+```typescript
+import { Siray } from 'siray';
+
+const client = new Siray({
+  apiKey: 'your-api-key-here',
+});
+```
+
+2. **Via environment variable**:
+```bash
+export SIRAY_API_KEY='your-api-key-here'
+```
+```typescript
+import { Siray } from 'siray';
+
+// API key will be read from SIRAY_API_KEY environment variable
+const client = new Siray();
+```
+
+If both are provided, the constructor option takes precedence.
+
 ## Usage
 
 ```typescript

@@ -1,5 +1,5 @@
 export interface SirayOptions {
-  apiKey: string;
+  apiKey?: string;
   baseURL?: string;
   timeout?: number;
 }
