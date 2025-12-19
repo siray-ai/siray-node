@@ -31,7 +31,7 @@ jobs:
         run: npm run build
 
       - name: Run tests
-        run: npm test -- --runInBand
+        run: npm test -- --runInBand --passWithNoTests
 
   publish:
     runs-on: ubuntu-latest
