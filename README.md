@@ -20,6 +20,9 @@ import { Siray } from 'siray';
 
 const client = new Siray({
   apiKey: 'your-api-key-here',
+  baseURL: 'https://api.siray.ai',  // Optional: API base URL
+  gatewayURL: 'https://api-gateway.siray.ai', // Optional: Gateway URL for file uploads
+  timeout: 30000,                // Optional: Request timeout in milliseconds
 });
 ```
 
@@ -61,6 +64,39 @@ const videoResponse = await client.video.generateAsync({
   prompt: 'A cat playing piano',
 });
 ```
+
+### File Upload
+
+Upload local files to Siray storage for use in generation requests:
+
+```javascript
+const { Siray } = require('siray');
+
+const client = new Siray({
+  apiKey: 'your-api-key',
+  gatewayURL: 'https://api-gateway.siray.ai', // optional, this is the default
+});
+
+// Upload a file
+const fileUrl = await client.file.upload('./path/to/image.jpg');
+console.log('Uploaded:', fileUrl);
+
+// Use in generation
+const result = await client.image.generateAsync({
+  model: 'flux-1.1-pro',
+  prompt: 'enhance this image',
+  image: fileUrl,
+});
+```
+
+**File Upload Features:**
+- Automatic multipart upload for files >8MB
+- Support for images and videos
+- Temporary S3 credentials (secure, scoped access)
+- Custom S3-compatible endpoints supported
+- SSL verification enabled by default
+
+**Note:** File upload requires the `@aws-sdk/client-s3` package, which is included as a dependency.
 
 ## API
 
