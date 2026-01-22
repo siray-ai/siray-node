@@ -4,6 +4,7 @@ import path from 'path';
 import { SirayOptions, SirayError } from './types';
 import { Image } from './image';
 import { Video } from './video';
+import { File } from './file';
 
 const MIME_TYPE_MAP: Record<string, string> = {
   jpg: 'image/jpeg',
@@ -23,19 +24,23 @@ export class Siray {
   private timeout: number;
   public readonly image: Image;
   public readonly video: Video;
+  private gatewayURL: string;
+  private gatewayApiKey: string;
+  public readonly file: File;
 
   constructor(options: SirayOptions = {}) {
     this.apiKey = options.apiKey || process.env.SIRAY_API_KEY || '';
     if (!this.apiKey) {
       throw new SirayError('API key is required. Provide it via options.apiKey or set SIRAY_API_KEY environment variable.');
     }
-    this.baseURL =
-      options.baseURL ||
-      'https://api.siray.ai';
+    this.baseURL = options.baseURL || 'https://api.siray.ai';
+    this.gatewayURL = options.gatewayURL || 'https://api-gateway.siray.ai';
     this.timeout = options.timeout || 30000;
+    this.gatewayApiKey = this.apiKey;
 
     this.image = new Image(this);
     this.video = new Video(this);
+    this.file = new File(this.makeGatewayRequest.bind(this));
   }
 
   private async makeRequest(
@@ -54,6 +59,66 @@ export class Siray {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${this.apiKey}`,
+          ...options.headers,
+        },
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        const errorData = (await response.json().catch(() => null)) as
+          | {
+              error?: {
+                message?: string;
+                code?: string;
+              };
+              [key: string]: any;
+            }
+          | null;
+        throw new SirayError(
+          errorData?.error?.message || `HTTP ${response.status}: ${response.statusText}`,
+          response.status,
+          errorData?.error?.code,
+          errorData
+        );
+      }
+
+      return await response.json();
+    } catch (error: unknown) {
+      clearTimeout(timeoutId);
+
+      if (error instanceof SirayError) {
+        throw error;
+      }
+
+      if (error instanceof Error && error.name === 'AbortError') {
+        throw new SirayError('Request timeout');
+      }
+
+      if (error instanceof Error) {
+        throw new SirayError(`Network error: ${error.message}`);
+      }
+
+      throw new SirayError('Network error: Unknown error object received');
+    }
+  }
+
+  private async makeGatewayRequest(
+    endpoint: string,
+    options: RequestInit = {}
+  ): Promise<any> {
+    const url = `${this.gatewayURL}${endpoint}`;
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), this.timeout);
+
+    try {
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `API-KEY ${this.gatewayApiKey}`,
           ...options.headers,
         },
       });
