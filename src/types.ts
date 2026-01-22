@@ -1,6 +1,7 @@
 export interface SirayOptions {
   apiKey?: string;
   baseURL?: string;
+  gatewayURL?: string;
   timeout?: number;
 }
 
@@ -75,4 +76,33 @@ export interface TaskStatus {
   isCompleted(): boolean;
   isFailed(): boolean;
   isProcessing(): boolean;
+}
+
+export interface FileUploadConfig {
+  accessKeyId: string;
+  secretAccessKey: string;
+  sessionToken: string;
+  region?: string;
+  bucketName: string;
+  endpointUrl?: string;
+  accessEndpoint?: string;
+}
+
+export interface STSCredentials {
+  access_key_id: string;
+  access_key_secret: string;
+  security_token: string;
+  region?: string;
+}
+
+export interface STSTokenData {
+  credentials: STSCredentials;
+  bucket_name: string;
+  upload_path: string;
+  upload_endpoint: string;
+  access_endpoint?: string;
+}
+
+export interface STSTokenResponse {
+  data: STSTokenData;
 }
