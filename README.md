@@ -1,6 +1,6 @@
 # Siray Node.js SDK
 
-Node.js SDK for Siray Image and Video Generation APIs.
+Node.js SDK for Siray Image, Video, and 3D Model Generation APIs.
 
 ## Installation
 
@@ -161,6 +161,36 @@ if (status.isCompleted()) {
 }
 ```
 
+### 3D Model Generation
+
+```typescript
+// Text-to-3D generation
+const response = await client.threed.generateAsync({
+  model: 'tencent/hunyuan3d-v2.5-rapid-text-to-3d',
+  prompt: 'A detailed medieval castle with towers',
+});
+
+console.log('Task ID:', response.task_id);
+
+// Query task status
+const status = await client.threed.queryTask(response.task_id);
+if (status.isCompleted()) {
+  console.log('Generated 3D model:', status.result);
+  console.log('All outputs:', status.outputs);
+} else if (status.isFailed()) {
+  console.log('Error:', status.fail_reason);
+} else {
+  console.log('Progress:', status.progress);
+}
+
+// Image-to-3D generation
+const imgTo3d = await client.threed.generateAsync({
+  model: 'tencent/hunyuan3d-v2.5-rapid-image-to-3d',
+  prompt: 'Convert this image to a 3D model',
+  image: 'https://example.com/your-image.jpg',
+});
+```
+
 ### Blocking Generation with `run`
 
 If you prefer a blocking flow, use the `run` helper to submit an async task and wait until it finishes (or fails) without writing the polling loop yourself. Pass `BlockingRunOptions` to override the default 2s poll interval and 5‑minute timeout.
@@ -190,9 +220,15 @@ const videoStatus = await client.video.run({
   model: 'your-video-model',
   prompt: 'A cat playing piano',
 });
+
+// 3D models expose the same helper
+const threeDStatus = await client.threed.run({
+  model: 'tencent/hunyuan3d-v2.5-rapid-text-to-3d',
+  prompt: 'A detailed medieval castle',
+});
 ```
 
-See `examples/blocking-run.ts` for a complete script covering both image and video blocking runs.
+See `examples/blocking-run.ts` for a complete script covering image and video blocking runs, and `examples/threed-generation.ts` for 3D model generation examples.
 
 ## Error Handling
 

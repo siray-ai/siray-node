@@ -4,6 +4,7 @@ import path from 'path';
 import { SirayOptions, SirayError } from './types';
 import { Image } from './image';
 import { Video } from './video';
+import { ThreeD } from './threed';
 import { File } from './file';
 
 const MIME_TYPE_MAP: Record<string, string> = {
@@ -24,6 +25,7 @@ export class Siray {
   private timeout: number;
   public readonly image: Image;
   public readonly video: Video;
+  public readonly threed: ThreeD;
   private gatewayURL: string;
   private gatewayApiKey: string;
   public readonly file: File;
@@ -40,6 +42,7 @@ export class Siray {
 
     this.image = new Image(this);
     this.video = new Video(this);
+    this.threed = new ThreeD(this);
     this.file = new File(this.makeGatewayRequest.bind(this));
   }
 

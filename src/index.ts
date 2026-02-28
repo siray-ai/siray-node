@@ -1,6 +1,7 @@
 import { Siray } from './client';
 import { Image } from './image';
 import { Video } from './video';
+import { ThreeD } from './threed';
 import { File } from './file';
 import { GenerationResponseImpl, TaskStatusImpl } from './task-utils';
 
@@ -8,6 +9,7 @@ import { GenerationResponseImpl, TaskStatusImpl } from './task-utils';
 export { Siray };
 export { Image };
 export { Video };
+export { ThreeD };
 export { File };
 export { GenerationResponseImpl, TaskStatusImpl };
 
