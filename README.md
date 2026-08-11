@@ -1,6 +1,6 @@
 # Siray Node.js SDK
 
-The official Node.js client library for Siray AI - a platform for AI-powered image, video and 3D model generation.
+The official Node.js client library for [Siray AI](https://siray.ai) - a platform for AI-powered image, video and 3D model generation.
 
 ## Installation
 
