@@ -1,6 +1,6 @@
 # Siray Node.js SDK
 
-Node.js SDK for Siray Image, Video, and 3D Model Generation APIs.
+Node.js SDK for [Siray](https://siray.ai) Image, Video, and 3D Model Generation APIs.
 
 ## Installation
 
