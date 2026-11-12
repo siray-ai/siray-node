@@ -1,6 +1,6 @@
 # Siray Node.js SDK
 
-The official Node.js client library for [Siray AI](https://siray.ai) - a platform for AI-powered image, video and 3D model generation.
+The official Node.js client library for [Siray AI](https://siray.ai) - a platform for AI-powered image, video, audio and 3D model generation.
 
 ## Installation
 
@@ -62,6 +62,17 @@ const imageResponse = await client.image.generateAsync({
 const videoResponse = await client.video.generateAsync({
   model: 'your-video-model',
   prompt: 'A cat playing piano',
+});
+
+// Asynchronous audio/music generation
+const audioResponse = await client.audio.generateAsync({
+  model: 'minimax/music-3.0',
+  prompt: 'Cinematic pop song with an emotional female lead vocal',
+  lyrics: '[Verse]\nI left the light on by the door',
+  lyrics_optimizer: false,
+  is_instrumental: false,
+  bitrate: 256000,
+  sample_rate: 44100,
 });
 ```
 
@@ -138,6 +149,36 @@ const response = await client.image.generate({
 });
 ```
 
+### Audio Generation
+
+```typescript
+const response = await client.audio.generateAsync({
+  model: 'minimax/music-3.0',
+  prompt: 'Cinematic pop song with an emotional female lead vocal',
+  lyrics: '[Verse]\nI left the light on by the door',
+  lyrics_optimizer: false,
+  is_instrumental: false,
+  bitrate: 256000,
+  sample_rate: 44100,
+});
+
+const status = await client.audio.queryTask(response.task_id);
+if (status.isCompleted()) {
+  console.log('Generated audio:', status.result);
+  console.log('All outputs:', status.outputs);
+} else if (status.isFailed()) {
+  console.log('Error:', status.fail_reason);
+}
+
+// Blocking helper; defaults to a 10 minute timeout
+const finalStatus = await client.audio.run({
+  model: 'minimax/music-3.0',
+  prompt: 'Instrumental cinematic pop',
+  lyrics_optimizer: true,
+  is_instrumental: true,
+});
+```
+
 ### Video Generation
 
 ```typescript
@@ -165,7 +206,7 @@ if (status.isCompleted()) {
 
 ```typescript
 // Text-to-3D generation
-const response = await client.threed.generateAsync({
+const response = await client.threeD.generateAsync({
   model: 'tencent/hunyuan3d-v2.5-rapid-text-to-3d',
   prompt: 'A detailed medieval castle with towers',
 });
@@ -173,7 +214,7 @@ const response = await client.threed.generateAsync({
 console.log('Task ID:', response.task_id);
 
 // Query task status
-const status = await client.threed.queryTask(response.task_id);
+const status = await client.threeD.queryTask(response.task_id);
 if (status.isCompleted()) {
   console.log('Generated 3D model:', status.result);
   console.log('All outputs:', status.outputs);
@@ -184,7 +225,7 @@ if (status.isCompleted()) {
 }
 
 // Image-to-3D generation
-const imgTo3d = await client.threed.generateAsync({
+const imgTo3d = await client.threeD.generateAsync({
   model: 'tencent/hunyuan3d-v2.5-rapid-image-to-3d',
   prompt: 'Convert this image to a 3D model',
   image: 'https://example.com/your-image.jpg',
@@ -222,7 +263,7 @@ const videoStatus = await client.video.run({
 });
 
 // 3D models expose the same helper
-const threeDStatus = await client.threed.run({
+const threeDStatus = await client.threeD.run({
   model: 'tencent/hunyuan3d-v2.5-rapid-text-to-3d',
   prompt: 'A detailed medieval castle',
 });

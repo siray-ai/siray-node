@@ -8,7 +8,7 @@ async function textTo3DExample() {
   try {
     // Text-to-3D generation
     console.log('Starting text-to-3D generation...');
-    const response = await client.threed.generateAsync({
+    const response = await client.threeD.generateAsync({
       model: 'tencent/hunyuan3d-v2.5-rapid-text-to-3d',
       prompt: 'A detailed medieval castle with towers and a drawbridge',
     });
@@ -20,7 +20,7 @@ async function textTo3DExample() {
     const maxAttempts = 60;
 
     while (attempts < maxAttempts) {
-      const status = await client.threed.queryTask(response.task_id);
+      const status = await client.threeD.queryTask(response.task_id);
 
       console.log(`Attempt ${attempts + 1}: Status = ${status.status}, Progress = ${status.progress || 'N/A'}`);
 
@@ -52,7 +52,7 @@ async function imageTo3DExample() {
   try {
     // Image-to-3D generation
     console.log('Starting image-to-3D generation...');
-    const response = await client.threed.generateAsync({
+    const response = await client.threeD.generateAsync({
       model: 'tencent/hunyuan3d-v2.5-rapid-image-to-3d',
       prompt: 'Convert this image to a 3D model',
       image: 'https://example.com/your-image.jpg',
@@ -62,7 +62,7 @@ async function imageTo3DExample() {
 
     // Use the blocking run helper instead of manual polling
     console.log('Waiting for completion...');
-    const status = await client.threed.run(
+    const status = await client.threeD.run(
       {
         model: 'tencent/hunyuan3d-v2.5-rapid-image-to-3d',
         prompt: 'Convert this image to a 3D model',

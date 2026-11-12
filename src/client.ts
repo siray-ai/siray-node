@@ -2,6 +2,7 @@ import fetch, { RequestInit } from 'node-fetch';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { SirayOptions, SirayError } from './types';
+import { Audio } from './audio';
 import { Image } from './image';
 import { Video } from './video';
 import { ThreeD } from './threed';
@@ -23,8 +24,11 @@ export class Siray {
   private apiKey: string;
   private baseURL: string;
   private timeout: number;
+  public readonly audio: Audio;
   public readonly image: Image;
   public readonly video: Video;
+  public readonly threeD: ThreeD;
+  // Backward-compatible alias; prefer `threeD`.
   public readonly threed: ThreeD;
   private gatewayURL: string;
   private gatewayApiKey: string;
@@ -40,9 +44,11 @@ export class Siray {
     this.timeout = options.timeout || 30000;
     this.gatewayApiKey = this.apiKey;
 
+    this.audio = new Audio(this);
     this.image = new Image(this);
     this.video = new Video(this);
-    this.threed = new ThreeD(this);
+    this.threeD = new ThreeD(this);
+    this.threed = this.threeD;
     this.file = new File(this.makeGatewayRequest.bind(this));
   }
 
